@@ -1,0 +1,21 @@
+Connectable_Entity: We created this parent table to share IDs and public keys between Individuals and Communities so they are compatible.
+
+Individual & Community: We linked these tables to Connectable_Entity using the same ID to handle the inheritance simply.
+
+BelongTo: We made this table to link people to communities and store the "isCreator" status.
+
+Entity_Link: We moved the link here (instead of on Messages) so users can declare social ties like "neighbors" as described in the text.
+
+Message: We kept the sender and content here but removed the receiver field to allow sending to multiple people.
+
+Message_Recipient: We added this table to let one message go to many receivers (1..*) instead of just one.
+
+Skill & Master: We used Skill for the list of names and Master to link them to users with their specific proficiency level (0-5).
+
+Service (and sub-types): We used a main table for common info (title, description) and separate tables for the specific types (Commercial, Free, Exchange) to handle inheritance.
+
+GeoLocation: We used the Individual's ID as the primary key here because of the composition in the UML; a location strictly belongs to one person.
+
+Opposition: We used a composite key (Target ID + Number) because the composition makes this a "weak" entity that relies entirely on the person being targeted.
+
+Vote_Opposition: We needed this table to let many people vote on one opposition by pointing to its complex ID.

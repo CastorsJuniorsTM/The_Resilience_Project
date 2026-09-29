@@ -1,0 +1,119 @@
+Database Project
+
+
+
+Summary:
+
+. UML Explanation
+. MLD Explanation
+. SQL Explanation
+. Python Explanation
+
+We started with the ReadMe and clarification notes to get an overall view of the model before diving into writing the UML.
+
+
+UML : 
+
+To design UML, we first listed the business objects present in the statement to help us create the diagram and the logical data model (LDM).
+Each class has a primary key. We notice that Individual and Community share common attributes and can both send messages.
+In this case, we create a Superclass which we name: 'Connectable_Entity' where they inherit from.
+
+    Connectable_Entity (#idEntity: Integer, name: String,  public_key_G1: String )
+
+    Individual (#idEntity : int, email : String)	
+    Community  (#idCommunity : int)
+
+    Message    (#idMessage: Integer, content: String,  send_date: DateTime)
+Messages are separated in order to support message history, references between messages...
+
+The exclusion vote cannot be represented by a simple link, as it must contains information. 
+We are creating an association class. 
+
+    Opposition (#idOpposition: int, vote_date: DateTime, reason: String)
+The vote is made by an individual against another one within a community.
+
+    Skills  (#idSkill : int, name : String)
+    
+    Geolocalisation (#idGeolocation: int, statement_date: DateTime, latitude: Float, longitude: Float,  link: String )
+
+    Service (#idService : int, titre : String, description : String,idIndividual)
+
+There are 3 types of services and they have characteristics, so we make 3 classes that inherit from the common attributes of Service
+
+    Exchange_Service (#idService : int, description_expectation: String )
+    Commercial_Service (#idService : int, price: Float )
+    Free_Service (#idService : int )
+
+Association classes:
+For (many to many) relations , we create a new class:
+
+    Master ( #idIndividual : int, proficiency_level : int)
+
+between Individual and Skills 
+We made this to link them to users with their specific proficiency level (0-5).
+
+    Link (#idSource: int, description: String)
+
+between 2 Entities
+We moved the link here (instead of on Messages) so users can declare social ties like "neighbors" as described in the text.
+
+    BelongTo (#idIndividual: int, isCreator: Bool)
+
+between Individual and Community
+We made this table to link people to communities and store the "isCreator" status.
+
+
+
+MLD:  
+
+
+The classes will all be connected to each other through Foreign Keys (=>).  
+
+We improved the code from different versions so that it has as few lines as possible:
+
+We thought at the beginning to create 2 classes : Opposition and Vote_Opposition. But we didnt need to had each vote separatly
+
+We also thought at the beginning to create 3 classes : Message, Message recipient, Message references
+
+We also gathered the inheritance attributes into the parent class (Entity and Service)
+
+
+
+SQL:  
+
+SQL is written almost the same way as the MLD, but we create the tables and add the constraints.  
+For example, you need to set NOT NULL for all attributes when no default value can be assigned.
+
+Some writings are specific in PostgreSQL:
+    TIMESTAMP for DateTime
+    CAST for CONCAT
+    REFERENCES for FOREIGN KEY
+
+We thought about some constraints like :
+
+The user can only enter an existing Geolocation with:
+    CONSTRAINT check_latitude CHECK (latitude BETWEEN -90 AND 90)       
+    CONSTRAINT check_longitude CHECK (longitude BETWEEN -180 AND 180)
+
+The only requirement we applied for the email is to have an @ within the text:
+    CONSTRAINT check_email_format CHECK (email LIKE '%@%')
+
+We need to make sure that you can't send a message to yourself:
+    CONSTRAINT check_sender_receiver_diff CHECK (idSender <> idReceiver)
+
+Check that the type of service matches:
+    CONSTRAINT check_service_type CHECK (type IN (1, 2, 3)),
+    CONSTRAINT chk_service_logic CHECK ((type = 1 AND price IS NULL AND description_expectation IS NULL)
+    OR (type = 2 AND price IS NULL AND description_expectation IS NOT NULL)
+    OR (type = 3 AND price IS NOT NULL AND description_expectation IS NULL))
+
+Individual cannot vote more than once against the same target in the same community :
+    CONSTRAINT unique_vote_per_user UNIQUE (idTarget, idVoter, idCommunity)
+
+
+
+
+
+
+Python : 
+

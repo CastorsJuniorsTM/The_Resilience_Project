@@ -1,0 +1,44 @@
+Clarification Note UML
+
+Individual:
+We found useful to add an email attribute to the class Individuals
+They can join one or multiple Communities or can be link to other Individuals
+Individual can (thanks to the multivaluation) have a stored Ğ1 public key.
+
+Connectable_Entity:
+Most important class without a doubt. It is the non-abstract parent class of individuals and Community.
+It allows us to manage all complex constraints to implement of the project such as links and messages between the Individual and/or the Community.
+
+Community:
+Communities can be link to other Communities thanks to Connectable_Entity.
+We added an attribute IsCreator to the association table between Community and Individual as we thought that it would be a relevant information to keep.
+Communities can (thanks to the multivaluation) have a stored Ğ1 public key.
+
+Skill:
+We decided to only keep one attribute in Skill which is the name as two skills do not have the same name
+
+Master:
+We did an association table that has the attribute proficiency_level between 1 and 5 as it was better to store this attribute in this association table instead of putting it in Skill
+
+Service : 
+Service can be offered for free, in exchange for another service (with drescription) or commercially (price in Ğ1)
+The Service table is a non-abstract parent class and has as children the 3 types of services.
+Contrary to Individual and Community tables, type tables do not have any association.
+
+Opposition:
+We created an opposition class in order to manage the fact that someone can vote against another individual.
+First we wanted to make it a composition class in order to manage the fact that someone cannot vote more than 1 time to a person but it is easier to manage it in the following steps.
+Thus, an individual can vote against 0 or many indivuals, an individual can be the target of 0 to many votes and a community can be concerned about 0 to many opposition vote.
+We added some attributes like reason and vote_date as we found it relevant.
+
+Message:
+Message can be send by Individuals and Communities
+They have a recipient and a date
+Message may reference another message (if part of a thread) and a message can be referecend 0 to many times.
+Only one person can send 0 to many messages to only 1 person and a person can have received 0 to many messages.
+
+Geographic coordinates:
+Individuals can store geographic coordinates.
+We decided to store only 1 or 0 location for each individual and not many location for each as it would otherwise overload the database.
+Two or more individuals can have the same location.
+It calculates and generates OpenStreetMap links for visualization.

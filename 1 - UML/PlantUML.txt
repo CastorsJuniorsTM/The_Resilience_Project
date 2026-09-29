@@ -1,0 +1,88 @@
+@startuml
+title The Resilience Project - UML Diagram
+
+abstract class Connectable_Entity {
+  +idEntity: Integer
+  +name: String
+  +public_key_G1 [0..1]: String
+  }
+  
+abstract class Service {
+  +idService: Integer
+  +title: String
+  +description_service: String
+  }
+
+class Free_Service {
+  }
+  
+class Commercial_Service {
+  +price: Float
+  }
+  
+class Exchange_Service {
+  +description_expectation: String
+  }
+
+class Individual {
+  +email: String
+  }
+
+class Community {
+}
+
+class Skill {
+  +name: String
+}
+
+class Message {
+  +idMessage: Integer
+  +content: String
+  +send_date: DateTime
+}
+
+class GeoLocation {
+  +idGeolocation: int
+  +statement_date: DateTime
+  +latitude: Float
+  +longitude: Float
+  +/link_osm : String
+}
+
+note right of GeoLocation::/link_osm
+  Calcul Formula:
+  "https://www.openstreetmap.org/#map=17/" 
+  + self.latitude + "/" + self.longitude
+end note
+
+class Opposition {
+  +idOpposition:  int
+  +vote_date: DateTime
+  +reason: String
+}
+
+Connectable_Entity <|-- Individual
+Connectable_Entity <|-- Community
+Connectable_Entity "0..n" --> "0..n" Connectable_Entity : linked to
+Connectable_Entity "1" --> "0..*" Message : send
+Connectable_Entity "1" --> "0..*" Message : receive
+
+Service <|-- Free_Service
+Service <|-- Commercial_Service
+Service <|-- Exchange_Service
+
+Individual "1..*" --> "0..*" Community : belongTo 
+
+Individual "0..*" --> "0..*" Skill : manages
+Individual "1" --> "0..*" Service : offers
+Individual "0..*" --> "0..1" GeoLocation : shares
+
+Service "0..*" --> "0..*" Skill : requires
+
+Opposition "0..*" --> "1" Community : kickOut
+Opposition "0..*" --> "1" Individual : vote
+Opposition "0..*" --> "1" Individual : target
+
+Message "0..*" --> "0..1" Message : refersTo
+
+@enduml

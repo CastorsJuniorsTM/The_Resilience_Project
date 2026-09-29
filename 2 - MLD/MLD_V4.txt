@@ -1,0 +1,67 @@
+Connectable_Entity (
+ #idEntity: int,
+ name: Varchar(100),
+ public_key_G1: Varchar(128)
+)
+Individual (
+ #idIndividual: int => Connectable_Entity(idEntity),
+ email: Varchar(255),
+ idGeolocation: int => GeoLocation(idGeolocation)
+)
+Community (
+ #idCommunity: int => Connectable_Entity(idEntity)
+)
+BelongTo (
+ #idIndividual: int => Individual(idIndividual),
+ #idCommunity: int => Community(idCommunity),
+ isCreator: Bool
+)
+Link (
+ #idSource: int => Connectable_Entity(idEntity),
+ #idTarget: int => Connectable_Entity(idEntity),
+ description: Varchar()
+)
+Message (
+ #idMessage: int,
+ content: Varchar(),
+ send_date: DateTime,
+ idSender: int => Connectable_Entity(idEntity),
+ idReceiver: int => Connectable_Entity(idEntity),
+ idReference: int => Message(idMessage),
+)
+Skill (
+ #name : Varchar(100)
+)
+Master (
+ #idIndividual : int => Individual(idIndividual),
+ #idSkill : int => Skill(name),
+ proficiency_level : int
+)
+Service (
+ #idService : int,
+ title : Varchar(100),
+ description_service : Varchar(),
+ idProvider : int => Individual(idIndividual),
+ description_expectation: VARCHAR(),
+ price: float,
+ type: {1,2,3}
+)
+Service_Requirement (
+ #idService : int => Service(idService),
+ #idSkill : Varchar(100) => Skill(name)
+)
+GeoLocation (
+ #idGeolocation: int,
+ statement_date: DateTime,
+ latitude: Float,
+ longitude: Float,
+ link_osm: Varchar(255)
+)
+Opposition (
+ #idOpposition: int,
+ vote_date: DateTime,
+ reason: Varchar(100),
+ idTarget: int => Individual(idIndividual),
+ idVoter: int => Individual(idIndividual),
+ idCommunity: int => Community(idCommunity)
+)

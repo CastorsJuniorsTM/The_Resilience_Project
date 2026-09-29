@@ -1,0 +1,8 @@
+Questions MLD+UML:
+I didn't implemented the fact that someone can add himself to the database
+Does Text is a valid type in the MLD ?
+For reason, i said Varchar(100), is it better text (=either we just put the reason for example toxicity, either we explain what happened)
+Big question: We did 2 Inheritance Absorbed by Child Classes for a Non-Abstract Parent Class. Is it possible to do it even if the child
+class doesn't have any attributs ? Because for Community and Free Service it is the case (see picture of the course i put on the branch)
+Does everyone agree to put name as a PK for skill as each skill is unique ?
+For proficiency_level we put in the MLD that this is of type int, is it possible to put [1..5] as in the UML

@@ -1,0 +1,91 @@
+Connectable_Entity (
+ #idEntity: int,
+ name: Varchar(100),
+ public_key_G1: Varchar(128)
+)
+Individual (
+ #idIndividual: int => Connectable_Entity(idEntity),
+ nameIndividual: Varchar(100) => Connectable_Entity(name),
+ public_key_G1: Varchar (128) => Connectable_Entity(name),
+ email: Varchar(255)
+)
+Community (
+ #idCommunity: int => Connectable_Entity(idEntity),
+ nameCommunity: Varchar(100) => Connectable_Entity(name),
+ public_key_G1: Varchar (128) => Connectable_Entity(name)
+)
+BelongsTo (
+ #idIndividual: int => Individual(idIndividual),
+ #idCommunity: int => Community(idCommunity),
+ isCreator: Bool
+)
+Entity_Link (
+ #idSource: int => Connectable_Entity(idEntity),
+ #idTarget: int => Connectable_Entity(idEntity),
+ description: Varchar(255)
+)
+Message (
+ #idMessage: int,
+ content: Text,
+ send_date: DateTime,
+ idSender: int => Connectable_Entity(idEntity),
+)
+Message_Reference (
+ idSender: int => Message(idMessage),
+ idRefersTo: int => Message(idMessage)
+)
+
+Message_Recipient (
+ #idMessage : int => Message(idMessage),
+ #idReceiver : int => Connectable_Entity(idEntity)
+)
+Skill (
+ #name : Varchar(100)
+)
+Master (
+ #idIndividual : int => Individual(idIndividual),
+ #idSkill : int => Skill(name),
+ proficiency_level : int
+)
+Service (
+ #idService : int,
+ title : Varchar(100),
+ description_service : Text,
+ idProvider : int => Individual(idIndividual)
+)
+Service_Requirement (
+ #idService : int => Service(idService),
+ #idSkill : int => Skill(name)
+)
+Commercial_Service (
+ #idService: int => Service(idService),
+ title: Varchar(100),
+ description_service: Text,
+ price: Float
+)
+Free_Service (
+ #idService: int => Service(idService)
+  title: Varchar(100),
+  description_service: Text,
+  price: Float
+)
+Exchange_Service (
+ #idService: int => Service(idService),
+ title: Varchar(100),
+ description_service: Text,
+ description_expectation: Text
+)
+GeoLocation (
+ #idIndividual: int => Individual(idIndividual),
+ latitude: Float,
+ longitude: Float,
+ statement_date: DateTime,
+ link_osm: Varchar(255)
+)
+Opposition (
+ #idTarget: int => Individual(idIndividual),
+ #idVoter: int => Individual(idIndividual),
+ #idCommunity: int => Community(idCommunity),
+ vote_date: DateTime,
+ reason: Varchar(100)
+)
