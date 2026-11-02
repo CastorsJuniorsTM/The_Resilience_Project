@@ -1,3 +1,19 @@
+-- Drop the existing tables (and the views that depend on them) so the schema can be reloaded.
+DROP TABLE IF EXISTS 
+    Opposition,
+    Service_Requirement,
+    Service,
+    Master,
+    Skill,
+    Message,
+    Link,
+    BelongTo,
+    Community,
+    Individual,
+    GeoLocation,
+    Connectable_Entity
+CASCADE;
+
 CREATE TABLE Connectable_Entity (
     idEntity        SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
@@ -224,19 +240,3 @@ SELECT
     e.public_key_G1
 FROM Community c
 JOIN Connectable_Entity e ON c.idCommunity = e.idEntity;
-
-DROP TABLE IF EXISTS 
-    Opposition,
-    Service_Requirement,
-    Service,
-    Master,
-    Skill,
-    Message,
-    Link,
-    BelongTo,
-    Community,
-    Individual,
-    GeoLocation,
-    Connectable_Entity
-CASCADE;
-
