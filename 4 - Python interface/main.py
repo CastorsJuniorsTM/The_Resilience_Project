@@ -158,7 +158,9 @@ def send_message(content, id_sender, id_receiver, id_reference=None):
 
     except psycopg2.Error as e:
         conn.rollback()
-        print("Error while sending message :")
+        print("Error while sending message :", e)
+    finally:
+        conn.close()
 
 def add_skill(skill_name):
     conn = get_connection()
@@ -268,4 +270,6 @@ def check_community_status(id_individual, id_community):
             print("No membership found for this individual or community.")
 
     except psycopg2.Error as e:
-        print("Error reading view :")
+        print("Error reading view :", e)
+    finally:
+        conn.close()
