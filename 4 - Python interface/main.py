@@ -1,17 +1,12 @@
+import os
 import psycopg2
 
-HOST = "tuxa.sme.utc"
-USER = "edXXXXXX"       #  to adapt
-PASSWORD = "password"  # to adapt
-DATABASE = "dbedXXXXXX"
-
-def get_connection():
-    try:
-        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (HOST, DATABASE, USER, PASSWORD))
-        return conn
-    except Exception as e:
-        print("Error :", e)
-        return None
+# Connection settings, read from the environment so that no credential is stored in the code.
+# Set RESILIENCE_DB_HOST, RESILIENCE_DB_NAME, RESILIENCE_DB_USER and RESILIENCE_DB_PASSWORD.
+HOST = os.environ.get("RESILIENCE_DB_HOST", "localhost")
+DATABASE = os.environ.get("RESILIENCE_DB_NAME", "dbedXXXXXX")
+USER = os.environ.get("RESILIENCE_DB_USER", "edXXXXXX")
+PASSWORD = os.environ.get("RESILIENCE_DB_PASSWORD", "password")
 
 def get_connection():
     try:
