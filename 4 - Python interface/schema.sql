@@ -1,4 +1,3 @@
--- Drop the existing tables (and the views that depend on them) so the schema can be reloaded.
 DROP TABLE IF EXISTS 
     Opposition,
     Service_Requirement,
